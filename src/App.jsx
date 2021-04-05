@@ -6,7 +6,10 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import PageNotFound from './pages/404'
 import { NavBar } from 'components/appbar';
+import firebaseApp from './firebase/firebaseConfig'
 function App() {
+
+  console.log(firebaseApp)
 
   return (
     <Router>
