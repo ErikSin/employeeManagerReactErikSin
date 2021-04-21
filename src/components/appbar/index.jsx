@@ -1,13 +1,37 @@
-import React from 'react'
-import {Link} from 'react-router-dom'
+import { UserContext } from 'App'
+import firebaseApp from 'firebase/firebaseConfig'
+import React, { useContext } from 'react'
+import {Link, useHistory} from 'react-router-dom'
 
 export const NavBar = () =>
 {
+    const [loggedUser, setLoggedUser] = useContext(UserContext)
+    let history = useHistory()
+    function handleLogout()
+    {
+        firebaseApp.auth().signOut().then(()=>
+        {
+            setLoggedUser({email:"", isLoggedIn:false})
+            history.push('/login')
+        })
+     
+    }
+
     return(
         <div style={styles.nav}>
             <Link style={styles.link} to='/'>Home</Link>
-            <Link style={styles.link} to='/register'>Register</Link>
-            <Link style={styles.link} to='/login'>Login</Link>
+            {!loggedUser.isLoggedIn &&
+                <React.Fragment>
+                    <Link style={styles.link} to='/register'>Register</Link>
+                    <Link style={styles.link} to='/login'>Login</Link>
+                </React.Fragment>  
+            }
+            {loggedUser.isLoggedIn &&
+                <React.Fragment>
+                    <Link style={styles.link} to='/dashboard'>My Dashboard</Link>
+                    <p style={styles.link} onClick={handleLogout}>Logout</p>
+                </React.Fragment>
+            }
         </div>
     )
 }
